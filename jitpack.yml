@@ -1,0 +1,3 @@
+install:
+    - mvn install:install-file -Dfile=bin/PHP4J-thin.jar -DpomFile=php4j-thin/pom.xml
+    - mvn install:install-file -Dfile=bin/PHP4J-fat.jar -DpomFile=php4j-fat/pom.xml

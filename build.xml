@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   
+<project name="phpjar-builder" default="default" basedir=".">
+    <description>Builds MacOS native binaries for phpjar</description>
+	<target name="release-mac" description="Create Mac Release Zip in bin directory">
+		<ant dir="phpjarBuilder" target="create-mac-zip" useNativeBasedir="true"/>
+		<mkdir dir="bin"/>
+		<mkdir dir="bin/native"/>
+		<copy file="phpjarBuilder/dist/phpjar-macos.zip" todir="bin/native" overwrite="true"/>
+	</target>
+        <target name="release-windows" description="Create Windows Release Zip in bin directory">
+		<ant dir="phpjarBuilder" target="create-windows-zip" useNativeBasedir="true"/>
+		<mkdir dir="bin"/>
+		<mkdir dir="bin/native"/>
+		<copy file="phpjarBuilder/dist/phpjar-win.zip" todir="bin/native" overwrite="true"/>
+	</target>
+	<target name="release-linux" description="Create Linux Release Zip in bin directory">
+		<ant dir="phpjarBuilder" target="create-linux-zip" useNativeBasedir="true"/>
+		<mkdir dir="bin"/>
+		<mkdir dir="bin/native"/>
+		<copy file="phpjarBuilder/dist/phpjar-linux.zip" todir="bin/native" overwrite="true"/>
+	</target>
+	<target name="release">
+		<ant dir="phpjarRuntime" target="build-fat-jar" useNativeBaseDir="true"/>
+		<copy file="phpjarRuntime/dist/phpjar-fat.jar" todir="bin" overwrite="true"/>
+		<copy file="phpjarRuntime/dist/phpjar-thin.jar" todir="bin" overwrite="true"/>
+	</target>
+	<target name="test" description="Run tests">
+		<ant dir="phpjarRuntime" target="all-tests" useNativeBaseDir="true"/>
+	</target> 
+	<target name="default" depends="release" description="Default target"/> 
+</project>

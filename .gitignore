@@ -1,0 +1,5 @@
+dist
+build
+private
+.DS_Store
+phpjarBuilder/tools/macdylibbundler
