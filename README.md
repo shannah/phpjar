@@ -3,6 +3,8 @@
 A self-contained PHP runtime bundled in a .jar file
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ylt92ykea1oaaj0k?svg=true)](https://ci.appveyor.com/project/shannah/phpjar)
+[![Build status](https://travis-ci.org/shannah/phpjar.svg?branch=master)](https://travis-ci.org/shannah/phpjar)
+
 
 ## License
 
