@@ -30,6 +30,8 @@ The current bundled version of PHP is from XAMPP 7.2.6
 
 ## Installation
 
+If want to include phpjar in a Maven, Gradle, or SBT project see the [maven installation instructions](https://mgp.weblite.ca/?q=com.github.shannah.phpjar:phpjar-thin:master-SNAPSHOT).
+
 Download either [phpjar-thin.jar](bin/phpjar-thin.jar) or [phpjar-fat.jar](bin/phpjar-fat.jar) and add it to your project's classpath.  The thin jar is only 25kb and does not include the full PHP distribution.  It will download the required files from Github at runtime.  The Fat jar is over 50 megabytes and includes PHP distributions for Mac, Windows, and Linux.  The appropriate PHP distribution will be installed in the user's home directory on first run at `$HOME/.phpjar`, but this can be changed at runtime to any directory.
 
 
