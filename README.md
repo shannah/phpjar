@@ -2,6 +2,8 @@
 
 A self-contained PHP runtime bundled in a .jar file
 
+[![Build status](https://ci.appveyor.com/api/projects/status/ylt92ykea1oaaj0k?svg=true)](https://ci.appveyor.com/project/shannah/phpjar)
+
 ## License
 
 phpjar includes PHP which was compiled by XAMPP.  Their compilation is distributed under the terms of the GNU General Public license.  Their license is described as follows:
