@@ -16,6 +16,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +28,21 @@ import java.util.logging.Logger;
  */
 public class PHPDevServer implements AutoCloseable, Runnable {
 
+    private File phpIniFile = null;
+    private final Map<String,String> phpIniDirectives = new HashMap<String,String>();
+    
+    public Map<String,String> getPhpIniDirectives() {
+        return phpIniDirectives;
+    }
+    
+    public File getPhpIniFile() {
+        return phpIniFile;
+    }
+    
+    public void setPhpIniFile(File f) {
+        this.phpIniFile = f;
+    }
+    
     /**
      * Gets the install directory where native PHP should be installed.
      * If null, then the default directory will be used.
@@ -179,6 +196,9 @@ public class PHPDevServer implements AutoCloseable, Runnable {
             if (useBundledPHP && PHPLoader.isWindows()) {
                 File phpDir = new File(phpPath).getParentFile();
                 File phpIni = new File(phpDir, "php.ini");
+                if (this.phpIniFile != null && this.phpIniFile.exists()) {
+                    phpIni = this.phpIniFile;
+                }
                 if (phpIni.exists()) {
                     pb.command().add("-c");
                     pb.command().add(phpDir.getAbsolutePath());
@@ -193,6 +213,9 @@ public class PHPDevServer implements AutoCloseable, Runnable {
             } else if (useBundledPHP && PHPLoader.isMac()) {
                 File phpDir = new File(phpPath).getParentFile().getParentFile();
                 File phpIni = new File(phpDir, "php.ini");
+                if (this.phpIniFile != null && this.phpIniFile.exists()) {
+                    phpIni = this.phpIniFile;
+                }
                 if (phpIni.exists()) {
                     pb.command().add("-c");
                     pb.command().add(phpDir.getAbsolutePath());
@@ -202,6 +225,9 @@ public class PHPDevServer implements AutoCloseable, Runnable {
             } else if (useBundledPHP && PHPLoader.isUnix()) {
                 File phpDir = new File(phpPath).getParentFile().getParentFile();
                 File phpIni = new File(phpDir, "php.ini");
+                if (this.phpIniFile != null && this.phpIniFile.exists()) {
+                    phpIni = this.phpIniFile;
+                }
                 if (phpIni.exists()) {
                     pb.command().add("-c");
                     pb.command().add(phpDir.getAbsolutePath());
@@ -211,6 +237,12 @@ public class PHPDevServer implements AutoCloseable, Runnable {
                 File libDir = new File(phpDir, "lib");
                 pb.environment().put("LD_LIBRARY_PATH", libDir.getAbsolutePath());
             }
+            
+            for (String phpIniFlag : phpIniDirectives.keySet()) {
+                pb.command().add("-d");
+                pb.command().add(phpIniFlag+"="+phpIniDirectives.get(phpIniFlag));
+            }
+            
             //System.out.println(pb.command());
             pb.directory(getDocumentRoot());
             
