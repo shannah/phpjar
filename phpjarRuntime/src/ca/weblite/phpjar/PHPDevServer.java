@@ -39,6 +39,10 @@ public class PHPDevServer implements AutoCloseable, Runnable {
         return phpIniFile;
     }
     
+    public void testMtd() {
+        
+    }
+    
     public void setPhpIniFile(File f) {
         this.phpIniFile = f;
     }
