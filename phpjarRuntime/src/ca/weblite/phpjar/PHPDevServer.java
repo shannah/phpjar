@@ -28,6 +28,20 @@ import java.util.logging.Logger;
  */
 public class PHPDevServer implements AutoCloseable, Runnable {
 
+    /**
+     * @return the routerScript
+     */
+    public String getRouterScript() {
+        return routerScript;
+    }
+
+    /**
+     * @param routerScript the routerScript to set
+     */
+    public void setRouterScript(String routerScript) {
+        this.routerScript = routerScript;
+    }
+
     private File phpIniFile = null;
     private final Map<String,String> phpIniDirectives = new HashMap<String,String>();
     
@@ -117,6 +131,8 @@ public class PHPDevServer implements AutoCloseable, Runnable {
      * of PHP.
      */
     private boolean useBundledPHP = true;
+    
+    private String routerScript = null;
     
     public PHPDevServer() {
         
@@ -242,6 +258,10 @@ public class PHPDevServer implements AutoCloseable, Runnable {
             for (String phpIniFlag : phpIniDirectives.keySet()) {
                 pb.command().add("-d");
                 pb.command().add(phpIniFlag+"="+phpIniDirectives.get(phpIniFlag));
+            }
+            
+            if (routerScript != null) {
+                pb.command().add(routerScript);
             }
             
             //System.out.println(pb.command());
