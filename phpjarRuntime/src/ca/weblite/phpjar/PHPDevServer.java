@@ -169,6 +169,32 @@ public class PHPDevServer implements AutoCloseable, Runnable {
         }).start();
     }
 
+    public File getPHPExe() throws IOException {
+        String phpPath = getPhpPath();
+
+        if (useBundledPHP) {
+            PHPLoader phpLoader = new PHPLoader();
+            if (getInstallDirectory() != null) {
+                phpLoader.setInstallDir(getInstallDirectory());
+            }
+            File bundledPhpDir = phpLoader.load(false);
+            File phpExe = new File(new File(bundledPhpDir, "bin"), "php");
+            if (!phpExe.exists()) {
+                phpExe = new File(phpExe.getParentFile(), "php.exe");
+            }
+            if (!phpExe.exists()) {
+                phpExe = new File(bundledPhpDir, "php.exe");
+            }
+            if (!phpExe.exists()) {
+                throw new IOException("Bundled PHP executable not found");
+            }
+            phpExe.setExecutable(true);
+            phpPath = phpExe.getAbsolutePath();
+
+        }
+        return new File(phpPath);
+    }
+    
     /**
      * Runs the server.  Don't call this method directly.  It is used
      * internally.  Use {@link #start() } to start the server.
@@ -180,28 +206,7 @@ public class PHPDevServer implements AutoCloseable, Runnable {
                 port = sock.getLocalPort();
                 sock.close();
             }
-            String phpPath = getPhpPath();
-            
-            if (useBundledPHP) {
-                PHPLoader phpLoader = new PHPLoader();
-                if (getInstallDirectory() != null) {
-                    phpLoader.setInstallDir(getInstallDirectory());
-                }
-                File bundledPhpDir = phpLoader.load(false);
-                File phpExe = new File(new File(bundledPhpDir, "bin"), "php");
-                if (!phpExe.exists()) {
-                    phpExe = new File(phpExe.getParentFile(), "php.exe");
-                }
-                if (!phpExe.exists()) {
-                    phpExe = new File(bundledPhpDir, "php.exe");
-                }
-                if (!phpExe.exists()) {
-                    throw new IOException("Bundled PHP executable not found");
-                }
-                phpExe.setExecutable(true);
-                phpPath = phpExe.getAbsolutePath();
-                    
-            }
+            String phpPath = getPHPExe().getAbsolutePath();
             String hostname = "0";
             if (PHPLoader.isWindows()) {
                 hostname = InetAddress.getByName(null).getHostAddress();
