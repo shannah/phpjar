@@ -44,6 +44,11 @@ public class PHPDevServer implements AutoCloseable, Runnable {
 
     private File phpIniFile = null;
     private final Map<String,String> phpIniDirectives = new HashMap<String,String>();
+    private final Map<String,String> environment = new HashMap<String,String>();
+    
+    public Map<String,String> getEnvironment() {
+        return environment;
+    }
     
     public Map<String,String> getPhpIniDirectives() {
         return phpIniDirectives;
@@ -215,6 +220,7 @@ public class PHPDevServer implements AutoCloseable, Runnable {
             
             
             ProcessBuilder pb = new ProcessBuilder(phpPath, "-S", hostname+":"+getPort());
+            pb.environment().putAll(environment);
             if (useBundledPHP && PHPLoader.isWindows()) {
                 File phpDir = new File(phpPath).getParentFile();
                 File phpIni = new File(phpDir, "php.ini");
