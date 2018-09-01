@@ -279,6 +279,11 @@ public class PHPDevServer implements AutoCloseable, Runnable {
             pb.directory(getDocumentRoot());
             
             pb.inheritIO();
+            Runtime.getRuntime().addShutdownHook(new Thread(()->{
+                try {
+                    proc.destroyForcibly();
+                } catch (Exception ex) {}
+            }));
             proc = pb.start();
             long startTime = System.currentTimeMillis();
             long timeout = 5000;
